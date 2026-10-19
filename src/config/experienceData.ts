@@ -1,0 +1,68 @@
+import { Amenity } from "@/types";
+
+export const experienceHighlights: Amenity[] = [
+  {
+    id: "breakfast",
+    title: "Continental Breakfast",
+    description: "Complimentary morning breakfast service featuring fresh fruits, pastries, and hot selections.",
+    icon: "Coffee",
+    status: "verified",
+    category: "comfort",
+  },
+  {
+    id: "wifi",
+    title: "High-Speed Wi-Fi",
+    description: "Reliable internet connectivity throughout guest rooms and common areas for work and leisure.",
+    icon: "Wifi",
+    status: "verified",
+    category: "connectivity",
+  },
+  {
+    id: "front-desk",
+    title: "24-Hour Front Desk",
+    description: "Around-the-clock reception team ready to assist with arrivals, inquiries, and guest requests.",
+    icon: "Clock",
+    status: "verified",
+    category: "service",
+  },
+  {
+    id: "air-conditioning",
+    title: "Climate Control",
+    description: "Individual, quiet air-conditioning units in guest rooms for reliable cooling and comfort.",
+    icon: "Wind",
+    status: "verified",
+    category: "comfort",
+  },
+  {
+    id: "parking",
+    title: "Secure On-Site Parking",
+    description: "Dedicated parking within the enclosed hotel premises, complimentary for registered guests.",
+    icon: "Car",
+    status: "verified",
+    category: "service",
+  },
+  {
+    id: "workspace",
+    title: "Workstation Desks",
+    description: "Dedicated in-room desks and comfortable seating suitable for business laptops and study.",
+    icon: "Laptop",
+    status: "verified",
+    category: "connectivity",
+  },
+  {
+    id: "refrigeration",
+    title: "In-Room Mini Refrigerator",
+    description: "Compact in-room mini-fridge for chilling personal beverages and refreshments.",
+    icon: "Refrigerator",
+    status: "reported_listing",
+    category: "comfort",
+  },
+  {
+    id: "private-bathrooms",
+    title: "Modern Ensuite Bathrooms",
+    description: "Private bathrooms equipped with hot water heaters, vanity mirrors, and contemporary fixtures.",
+    icon: "Bath",
+    status: "verified",
+    category: "comfort",
+  },
+];
