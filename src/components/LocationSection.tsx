@@ -3,34 +3,63 @@
 import React from "react";
 import { MapPin, Navigation, Clock, ShieldCheck, Phone, MessageSquare } from "lucide-react";
 import { siteConfig } from "@/config/siteConfig";
+import { motion, useReducedMotion } from "framer-motion";
+import { staggerContainer, sectionLabel, fadeUp, slideInLeft, slideInRight } from "@/lib/motion";
 
 export function LocationSection() {
   const { contact } = siteConfig;
   const isPhoneActive = contact.isPhoneConfirmed && Boolean(contact.primaryPhone);
+  const shouldReduce = useReducedMotion();
+
+  const viewport = { once: true, amount: 0.15 };
+  const headerStagger = staggerContainer(0.1, 0);
+  const cardsStagger = staggerContainer(0.1, 0.05);
+  const reduced = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { duration: 0.4 } } };
 
   return (
     <section id="location" className="py-20 sm:py-24 bg-midnight text-ivory">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="max-w-2xl mx-auto text-center mb-12 sm:mb-16">
-          <div className="inline-flex items-center gap-2 mb-3">
+        <motion.div
+          className="max-w-2xl mx-auto text-center mb-12 sm:mb-16"
+          variants={headerStagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewport}
+        >
+          <motion.div
+            variants={shouldReduce ? reduced : sectionLabel}
+            className="inline-flex items-center gap-2 mb-3"
+          >
             <span className="w-6 h-[1px] bg-champagne" />
             <span className="text-[11px] uppercase tracking-luxury text-champagne font-medium">
-              Directions & Map
+              Directions &amp; Map
             </span>
             <span className="w-6 h-[1px] bg-champagne" />
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-serif text-ivory font-normal tracking-tight">
-            Location & Access
-          </h2>
-          <p className="mt-3 text-sm sm:text-base text-warmgrey-light font-light leading-relaxed">
+          </motion.div>
+          <motion.h2
+            variants={shouldReduce ? reduced : fadeUp}
+            className="text-3xl sm:text-4xl font-serif text-ivory font-normal tracking-tight"
+          >
+            Location &amp; Access
+          </motion.h2>
+          <motion.p
+            variants={shouldReduce ? reduced : fadeUp}
+            className="mt-3 text-sm sm:text-base text-warmgrey-light font-light leading-relaxed"
+          >
             Conveniently situated in Chikakore, Kubwa, offering peaceful surroundings with easy transit across Abuja.
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Map Container */}
-          <div className="lg:col-span-7 flex flex-col space-y-4">
+          <motion.div
+            className="lg:col-span-7 flex flex-col space-y-4"
+            variants={shouldReduce ? reduced : slideInLeft}
+            initial="hidden"
+            whileInView="show"
+            viewport={viewport}
+          >
             <div className="relative w-full aspect-[16/10] sm:aspect-[16/9] rounded-[8px] overflow-hidden border border-champagne/25 bg-midnight-surface">
               {/* Google Maps Embed focused on Hiltons Bellaire Abuja search */}
               <iframe
@@ -60,12 +89,21 @@ export function LocationSection() {
                 <Navigation className="w-3.5 h-3.5 stroke-[1.75]" />
               </a>
             </div>
-          </div>
+          </motion.div>
 
           {/* Location & Verified Address Details */}
-          <div className="lg:col-span-5 space-y-5">
+          <motion.div
+            className="lg:col-span-5 space-y-5"
+            variants={cardsStagger}
+            initial="hidden"
+            whileInView="show"
+            viewport={viewport}
+          >
             {/* Address Card */}
-            <div className="p-6 rounded-[8px] bg-midnight-surface border border-champagne/20 space-y-4">
+            <motion.div
+              variants={shouldReduce ? reduced : fadeUp}
+              className="p-6 rounded-[8px] bg-midnight-surface border border-champagne/20 space-y-4"
+            >
               <div className="flex items-start gap-3.5">
                 <div className="w-10 h-10 rounded-[6px] bg-champagne/20 text-champagne flex items-center justify-center shrink-0">
                   <MapPin className="w-5 h-5" />
@@ -90,21 +128,27 @@ export function LocationSection() {
                 <Clock className="w-4 h-4 text-champagne shrink-0" />
                 <span>Front Desk: {contact.receptionHours}</span>
               </div>
-            </div>
+            </motion.div>
 
             {/* Parking & Transportation Card */}
-            <div className="p-6 rounded-[8px] bg-midnight-surface border border-warmgrey/20 space-y-2.5">
+            <motion.div
+              variants={shouldReduce ? reduced : fadeUp}
+              className="p-6 rounded-[8px] bg-midnight-surface border border-warmgrey/20 space-y-2.5"
+            >
               <div className="flex items-center gap-2 text-champagne text-xs uppercase tracking-luxury font-medium">
                 <ShieldCheck className="w-4 h-4" />
-                <span>Arrival & Parking</span>
+                <span>Arrival &amp; Parking</span>
               </div>
               <p className="text-xs sm:text-sm text-warmgrey-light leading-relaxed font-light">
                 Secure gated parking is available on-site for registered guests. The property is accessible via primary Kubwa arterial roads.
               </p>
-            </div>
+            </motion.div>
 
             {/* Direct Contact Status Notice */}
-            <div className="p-5 rounded-[8px] bg-midnight-light/40 border border-warmgrey/15 space-y-2">
+            <motion.div
+              variants={shouldReduce ? reduced : fadeUp}
+              className="p-5 rounded-[8px] bg-midnight-light/40 border border-warmgrey/15 space-y-2"
+            >
               <span className="text-[10px] uppercase tracking-luxury text-champagne font-medium block">
                 Direct Contact Channels
               </span>
@@ -134,8 +178,8 @@ export function LocationSection() {
                   Direct telephone lines are pending management verification to ensure accuracy. For verified reservation options, please use our partner booking links.
                 </p>
               )}
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
     </section>

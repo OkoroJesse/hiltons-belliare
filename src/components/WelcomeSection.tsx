@@ -4,37 +4,63 @@ import React from "react";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { useBookingModal } from "@/context/BookingContext";
+import { motion, useReducedMotion } from "framer-motion";
+import { staggerContainer, sectionLabel, fadeUp, slideInRight } from "@/lib/motion";
 
 export function WelcomeSection() {
   const { openBooking } = useBookingModal();
+  const shouldReduce = useReducedMotion();
+
+  const viewport = { once: true, amount: 0.18 };
+  const textStagger = staggerContainer(0.12, 0);
+  const reduced = shouldReduce ? { hidden: { opacity: 0 }, show: { opacity: 1, transition: { duration: 0.4 } } } : undefined;
 
   return (
     <section className="py-20 sm:py-24 bg-ivory text-charcoal border-b border-warmgrey/15">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           {/* Editorial Text Column */}
-          <div className="lg:col-span-7 space-y-6">
-            <div className="inline-flex items-center gap-2">
+          <motion.div
+            className="lg:col-span-7 space-y-6"
+            variants={textStagger}
+            initial="hidden"
+            whileInView="show"
+            viewport={viewport}
+          >
+            {/* Eyebrow label */}
+            <motion.div
+              variants={reduced ?? sectionLabel}
+              className="inline-flex items-center gap-2"
+            >
               <span className="w-8 h-[1px] bg-champagne" />
               <span className="text-[11px] uppercase tracking-luxury text-champagne-dark font-medium">
                 Welcome to Hiltons Bellaire
               </span>
-            </div>
+            </motion.div>
 
-            <h2 className="text-2xl sm:text-3.5xl lg:text-4xl font-serif text-midnight font-normal leading-[1.2] tracking-tight">
+            <motion.h2
+              variants={reduced ?? fadeUp}
+              className="text-2xl sm:text-3.5xl lg:text-4xl font-serif text-midnight font-normal leading-[1.2] tracking-tight"
+            >
               A Quiet Haven of Hospitality Set Apart in Chikakore
-            </h2>
+            </motion.h2>
 
-            <div className="space-y-4 text-warmgrey-dark text-sm sm:text-base leading-relaxed font-light">
+            <motion.div
+              variants={reduced ?? fadeUp}
+              className="space-y-4 text-warmgrey-dark text-sm sm:text-base leading-relaxed font-light"
+            >
               <p>
                 Hiltons Bellaire offers a calming, boutique hospitality experience in the residential heart of Chikakore, Kubwa. Designed for guests seeking comfort away from busy city corridors, our property blends modern architectural finishes with warm, attentive Nigerian hospitality.
               </p>
               <p>
                 Whether you are visiting Abuja for government engagements, commercial business in Kubwa, or a relaxing weekend getaway, enjoy tranquil air-conditioned rooms, 24-hour reception assistance, and complimentary continental breakfast.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="pt-2 flex flex-wrap items-center gap-6">
+            <motion.div
+              variants={reduced ?? fadeUp}
+              className="pt-2 flex flex-wrap items-center gap-6"
+            >
               <a
                 href="#rooms"
                 className="inline-flex items-center gap-2 text-xs uppercase tracking-luxury font-medium text-midnight hover:text-champagne-dark transition-colors group"
@@ -49,11 +75,17 @@ export function WelcomeSection() {
               >
                 <span>Getting to Kubwa</span>
               </a>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           {/* Complementary Image Column */}
-          <div className="lg:col-span-5 relative">
+          <motion.div
+            className="lg:col-span-5 relative"
+            variants={reduced ?? slideInRight}
+            initial="hidden"
+            whileInView="show"
+            viewport={viewport}
+          >
             <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-card border border-champagne/20">
               <Image
                 src="/images/hotel/exterior-dusk-view.jpg"
@@ -68,7 +100,7 @@ export function WelcomeSection() {
                 <p className="text-[10px] text-warmgrey-light">Quiet residential location with secure on-site parking</p>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

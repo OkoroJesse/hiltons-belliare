@@ -5,18 +5,34 @@ import Link from "next/link";
 import Image from "next/image";
 import { siteConfig } from "@/config/siteConfig";
 import { bookingPlatforms } from "@/config/bookingPlatforms";
-import { ArrowUpRight, MapPin, Navigation } from "lucide-react";
+import { ArrowUpRight, Navigation } from "lucide-react";
 import { useBookingModal } from "@/context/BookingContext";
+import { motion, useReducedMotion } from "framer-motion";
+import { staggerContainer, fadeUp } from "@/lib/motion";
 
 export function Footer() {
   const { openBooking } = useBookingModal();
+  const shouldReduce = useReducedMotion();
+
+  const viewport = { once: true, amount: 0.1 };
+  const footerStagger = staggerContainer(0.08, 0);
+  const reduced = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { duration: 0.4 } } };
 
   return (
     <footer className="bg-midnight-dark text-ivory pt-14 pb-8 border-t border-champagne/15">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-warmgrey/15">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-warmgrey/15"
+          variants={footerStagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewport}
+        >
           {/* Brand Column */}
-          <div className="lg:col-span-5 space-y-4">
+          <motion.div
+            className="lg:col-span-5 space-y-4"
+            variants={shouldReduce ? reduced : fadeUp}
+          >
             <Link href="/" className="inline-flex items-center gap-3">
               <div className="w-10 h-10 rounded-full overflow-hidden border border-champagne/40 bg-midnight shrink-0 shadow-sm">
                 <Image
@@ -38,13 +54,15 @@ export function Footer() {
             </p>
 
             <div className="pt-2 flex items-center gap-3">
-              <button
+              <motion.button
                 type="button"
                 onClick={() => openBooking()}
                 className="px-4 py-2 rounded-full bg-champagne text-midnight text-xs font-medium uppercase tracking-luxury hover:bg-champagne-light transition-all shadow-gold"
+                whileHover={shouldReduce ? {} : { scale: 1.03 }}
+                whileTap={shouldReduce ? {} : { scale: 0.97 }}
               >
                 Book Your Stay
-              </button>
+              </motion.button>
               <a
                 href={siteConfig.contact.googleMapsUrl}
                 target="_blank"
@@ -55,10 +73,13 @@ export function Footer() {
                 <Navigation className="w-3 h-3 text-champagne" />
               </a>
             </div>
-          </div>
+          </motion.div>
 
           {/* Quick Navigation Links */}
-          <div className="lg:col-span-3 space-y-3">
+          <motion.div
+            className="lg:col-span-3 space-y-3"
+            variants={shouldReduce ? reduced : fadeUp}
+          >
             <p className="text-xs uppercase tracking-luxury text-champagne font-medium">Explore</p>
             <nav className="flex flex-col space-y-2">
               {siteConfig.navLinks.map((link) => (
@@ -71,10 +92,13 @@ export function Footer() {
                 </a>
               ))}
             </nav>
-          </div>
+          </motion.div>
 
           {/* Booking Platforms */}
-          <div className="lg:col-span-4 space-y-3">
+          <motion.div
+            className="lg:col-span-4 space-y-3"
+            variants={shouldReduce ? reduced : fadeUp}
+          >
             <p className="text-xs uppercase tracking-luxury text-champagne font-medium">Verified Booking Partners</p>
             <p className="text-xs text-warmgrey-light">Check real-time calendar availability and confirm rates:</p>
             <div className="flex flex-col space-y-2 pt-1">
@@ -94,8 +118,8 @@ export function Footer() {
                 </a>
               ))}
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Address and Legal Bottom Bar */}
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] text-warmgrey">

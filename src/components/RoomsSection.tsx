@@ -7,10 +7,13 @@ import { RoomDetailModal } from "@/components/RoomDetailModal";
 import { Room } from "@/types";
 import { useBookingModal } from "@/context/BookingContext";
 import { ArrowUpRight } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+import { staggerContainer, fadeUp, sectionLabel, cardReveal } from "@/lib/motion";
 
 export function RoomsSection() {
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
   const { openBooking } = useBookingModal();
+  const shouldReduce = useReducedMotion();
 
   const handleOpen = (room: Room) => {
     setSelectedRoom(room);
@@ -20,35 +23,72 @@ export function RoomsSection() {
     setSelectedRoom(null);
   };
 
+  const viewport = { once: true, amount: 0.12 };
+  const headerStagger = staggerContainer(0.1, 0);
+  const cardStagger = staggerContainer(0.1, 0.1);
+  const reduced = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { duration: 0.4 } } };
+
   return (
     <section id="rooms" className="py-20 sm:py-28 bg-[#F8F5EF] border-t border-[#EAE5DB]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="max-w-2xl mx-auto text-center mb-12 sm:mb-16">
-          <div className="inline-flex items-center gap-2 mb-3">
+        <motion.div
+          className="max-w-2xl mx-auto text-center mb-12 sm:mb-16"
+          variants={headerStagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewport}
+        >
+          <motion.div
+            variants={shouldReduce ? reduced : sectionLabel}
+            className="inline-flex items-center gap-2 mb-3"
+          >
             <span className="w-6 h-[1px] bg-champagne" />
             <span className="text-[11px] uppercase tracking-[0.18em] text-champagne-dark font-medium">
               Accommodations
             </span>
             <span className="w-6 h-[1px] bg-champagne" />
-          </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-[40px] font-serif text-midnight font-normal tracking-tight">
-            Rooms & Suites
-          </h2>
-          <p className="mt-3.5 text-base sm:text-[17px] text-[#555A60] font-light leading-relaxed">
+          </motion.div>
+          <motion.h2
+            variants={shouldReduce ? reduced : fadeUp}
+            className="text-3xl sm:text-4xl lg:text-[40px] font-serif text-midnight font-normal tracking-tight"
+          >
+            Rooms &amp; Suites
+          </motion.h2>
+          <motion.p
+            variants={shouldReduce ? reduced : fadeUp}
+            className="mt-3.5 text-base sm:text-[17px] text-[#555A60] font-light leading-relaxed"
+          >
             Thoughtfully appointed bedrooms featuring quiet air conditioning, bespoke finishes, and restful comfort in Chikakore, Kubwa.
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
-        {/* Room Grid: 1-col on mobile, 2-col on tablet, 3-col on desktop with 28-32px gaps */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 lg:gap-8">
+        {/* Room Grid — staggered card reveals */}
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 lg:gap-8"
+          variants={cardStagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewport}
+        >
           {roomsData.map((room) => (
-            <RoomCard key={room.id} room={room} onOpenDetails={handleOpen} />
+            <motion.div
+              key={room.id}
+              variants={shouldReduce ? reduced : cardReveal}
+            >
+              <RoomCard room={room} onOpenDetails={handleOpen} />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
-        {/* Bottom Editorial Assistance Banner (clean, minimal styling, no heavy shadows) */}
-        <div className="mt-14 sm:mt-18 p-7 sm:p-8 rounded-[8px] bg-white border border-[#E4DFD5] flex flex-col sm:flex-row items-center justify-between gap-5">
+        {/* Bottom Banner */}
+        <motion.div
+          className="mt-14 sm:mt-18 p-7 sm:p-8 rounded-[8px] bg-white border border-[#E4DFD5] flex flex-col sm:flex-row items-center justify-between gap-5"
+          variants={shouldReduce ? reduced : fadeUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewport}
+        >
           <div className="space-y-1 text-center sm:text-left">
             <h3 className="font-serif text-xl text-midnight font-normal">
               Planning Your Stay in Abuja?
@@ -65,12 +105,10 @@ export function RoomsSection() {
             <span>View Booking Options</span>
             <ArrowUpRight className="w-4 h-4 stroke-[1.75]" />
           </button>
-        </div>
+        </motion.div>
 
         {/* Room Detail Modal */}
-        {selectedRoom && (
-          <RoomDetailModal room={selectedRoom} onClose={handleClose} />
-        )}
+        <RoomDetailModal room={selectedRoom} onClose={handleClose} />
       </div>
     </section>
   );

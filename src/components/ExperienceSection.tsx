@@ -4,6 +4,8 @@ import React from "react";
 import Image from "next/image";
 import { experienceHighlights } from "@/config/experienceData";
 import { Coffee, Wifi, Clock, Wind, Car, Laptop, Refrigerator, Bath } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+import { staggerContainer, fadeUp, sectionLabel, cardReveal } from "@/lib/motion";
 
 // Robust icon map with genuine Lucide icons
 const iconMap: Record<string, React.ReactNode> = {
@@ -40,34 +42,62 @@ const spaces = [
 ];
 
 export function ExperienceSection() {
+  const shouldReduce = useReducedMotion();
+  const viewport = { once: true, amount: 0.15 };
+  const headerStagger = staggerContainer(0.1, 0);
+  const spacesStagger = staggerContainer(0.12, 0.05);
+  const amenitiesStagger = staggerContainer(0.06, 0.1);
+  const reduced = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { duration: 0.4 } } };
+
   return (
     <section id="experience" className="py-20 sm:py-24 bg-midnight text-ivory relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="max-w-2xl mx-auto text-center mb-14 sm:mb-16">
-          <div className="inline-flex items-center gap-2 mb-3">
+        <motion.div
+          className="max-w-2xl mx-auto text-center mb-14 sm:mb-16"
+          variants={headerStagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewport}
+        >
+          <motion.div
+            variants={shouldReduce ? reduced : sectionLabel}
+            className="inline-flex items-center gap-2 mb-3"
+          >
             <span className="w-6 h-[1px] bg-champagne" />
             <span className="text-[11px] uppercase tracking-luxury text-champagne font-medium">
               Guest Services
             </span>
             <span className="w-6 h-[1px] bg-champagne" />
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-serif text-ivory font-normal tracking-tight">
-            Experience & Amenities
-          </h2>
-          <p className="mt-3 text-sm sm:text-base text-warmgrey-light font-light leading-relaxed">
+          </motion.div>
+          <motion.h2
+            variants={shouldReduce ? reduced : fadeUp}
+            className="text-3xl sm:text-4xl font-serif text-ivory font-normal tracking-tight"
+          >
+            Experience &amp; Amenities
+          </motion.h2>
+          <motion.p
+            variants={shouldReduce ? reduced : fadeUp}
+            className="mt-3 text-sm sm:text-base text-warmgrey-light font-light leading-relaxed"
+          >
             Thoughtful conveniences tailored for a seamless, comfortable stay in Kubwa.
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
-        {/* Feature Cards Grid: Clean minimal cards without drop shadows or artificial gradients */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-7 mb-16">
+        {/* Feature Cards Grid: Clean minimal cards with subtle hover zoom */}
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-7 mb-16"
+          variants={spacesStagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewport}
+        >
           {spaces.map((space) => (
-            <div
+            <motion.div
               key={space.title}
+              variants={shouldReduce ? reduced : cardReveal}
               className="group rounded-[6px] overflow-hidden bg-midnight-surface border border-warmgrey/20 flex flex-col hover:border-champagne/40 transition-colors duration-200"
             >
-              {/* Natural photo presentation: no heavy gradient overlays */}
               <div className="relative aspect-[16/10] overflow-hidden bg-midnight">
                 <Image
                   src={space.image}
@@ -88,15 +118,22 @@ export function ExperienceSection() {
                   {space.description}
                 </p>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
-        {/* Amenities Highlights Grid: Clean, flat cards with no shadows */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-4.5">
+        {/* Amenities Highlights Grid */}
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-4.5"
+          variants={amenitiesStagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewport}
+        >
           {experienceHighlights.map((amen) => (
-            <div
+            <motion.div
               key={amen.id}
+              variants={shouldReduce ? reduced : fadeUp}
               className="flex items-start gap-3.5 p-4 rounded-[6px] bg-midnight-surface border border-warmgrey/15 hover:border-champagne/30 transition-colors"
             >
               <div className="w-9 h-9 flex items-center justify-center rounded-[4px] bg-champagne/15 text-champagne shrink-0">
@@ -106,9 +143,9 @@ export function ExperienceSection() {
                 <h3 className="font-serif text-sm sm:text-[15px] text-ivory mb-1 font-normal">{amen.title}</h3>
                 <p className="text-xs text-warmgrey-light leading-relaxed font-light">{amen.description}</p>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

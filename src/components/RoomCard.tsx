@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ArrowUpRight, BedDouble, Users, Maximize2, Sparkles, CheckCircle2 } from "lucide-react";
 import { Room } from "@/types";
 import { useBookingModal } from "@/context/BookingContext";
+import { motion, useReducedMotion } from "framer-motion";
 
 interface RoomCardProps {
   room: Room;
@@ -13,6 +14,7 @@ interface RoomCardProps {
 
 export function RoomCard({ room, onOpenDetails }: RoomCardProps) {
   const { openBooking } = useBookingModal();
+  const shouldReduce = useReducedMotion();
 
   return (
     <article className="group flex flex-col bg-white border border-[#E7E2D8] rounded-[6px] overflow-hidden transition-colors duration-200">
@@ -92,24 +94,28 @@ export function RoomCard({ room, onOpenDetails }: RoomCardProps) {
           </div>
         </div>
 
-        {/* Compact, refined buttons */}
+        {/* Compact, refined buttons with tactile feedback */}
         <div className="flex items-center gap-2.5 pt-0.5">
-          <button
+          <motion.button
             type="button"
             onClick={() => onOpenDetails(room)}
+            whileHover={shouldReduce ? {} : { scale: 1.02 }}
+            whileTap={shouldReduce ? {} : { scale: 0.98 }}
             className="flex-1 py-2 px-3 rounded-[4px] bg-champagne text-midnight hover:bg-champagne-light text-[11px] font-medium uppercase tracking-[0.06em] transition-colors duration-200 text-center"
           >
             View Room
-          </button>
+          </motion.button>
 
-          <button
+          <motion.button
             type="button"
             onClick={() => openBooking(room.name)}
+            whileHover={shouldReduce ? {} : { scale: 1.02 }}
+            whileTap={shouldReduce ? {} : { scale: 0.98 }}
             className="flex-1 py-2 px-3 rounded-[4px] bg-transparent border border-[#CCC6B8] hover:border-midnight text-midnight text-[11px] font-medium uppercase tracking-[0.06em] transition-colors duration-200 flex items-center justify-center gap-1 text-center"
           >
             <span>Enquire</span>
             <ArrowUpRight className="w-3 h-3 stroke-[1.75]" />
-          </button>
+          </motion.button>
         </div>
       </div>
     </article>
